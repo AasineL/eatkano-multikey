@@ -1,5 +1,10 @@
 {
   "lang": "en",
+  "lanes": "Lane count",
+  "lane-help": "Keys run left to right. Mouse and touch also work.",
+  "keys-help": "Save each layout separately. Enter one unique letter or digit per lane, left to right (case-insensitive).",
+  "invalid-keys": "Use exactly one unique letter or digit per lane:",
+  "invalid-time": "Enter a whole number of seconds from 1 to 3600.",
   "start": "Start",
   "normal": "Normal",
   "endless": "Endless",

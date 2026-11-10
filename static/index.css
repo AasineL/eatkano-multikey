@@ -293,3 +293,29 @@ body {
 .dropdown-item {
     cursor: pointer;
 }
+
+/* Keep the original art and colors, with a responsive multi-key board. */
+html, body { height: 100%; overflow: hidden; font-size: clamp(10px, 2.7vw, 20px); }
+#gameBody { width: min(100%, 640px); height: 100dvh; overflow: hidden; }
+#welcome, #GameScoreLayer { position: fixed; overflow-y: auto; }
+#welcome > .BOX-M { min-height: 100%; height: max-content; padding: 1.5rem 0; }
+#welcome .container.mb-5 { margin-bottom: 1rem !important; }
+#GameLayerBG { position: absolute; touch-action: none; }
+#GameTimeLayer { position: absolute; z-index: 2; pointer-events: none; font-size: clamp(28px, 7vw, 64px); }
+.GameLayer { width: 100%; }
+.block { box-sizing: border-box; }
+#lane-options, #setting { color: #fff; }
+#lane-select { min-width: 200px; }
+#key-hint { font-family: monospace; font-size: 1.3rem; }
+#lane-keys { position: absolute; bottom: 0; left: 0; width: 100%; display: flex; pointer-events: none; z-index: 3; }
+#lane-keys span { flex: 1; text-align: center; padding: .25rem 0; color: #24414b; background: rgba(184, 223, 230, .7); font-weight: bold; font-size: 1.2rem; }
+#settings-error { color: #ffb6b6; white-space: normal; }
+#setting { max-width: 680px; }
+#setting .input-group-prepend { min-width: 5em; }
+#result-context { font-size: .55em; margin: .5em 0; }
+#GameScoreLayer > div { margin-top: min(20vh, 160px) !important; }
+@media (max-height: 600px) {
+    #welcome #desc { font-size: 1.3em !important; }
+    #welcome .container.mb-5 { margin-bottom: .3rem !important; }
+    #welcome > .BOX-M { padding: .5rem 0; }
+}

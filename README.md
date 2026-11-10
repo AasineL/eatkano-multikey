@@ -3,7 +3,24 @@
 </p>
 <div align="center">
 
-# EatKano
+# EatKano MultiKey
+
+基于 [arcxingye/EatKano](https://github.com/arcxingye/EatKano) 的多轨道改版，保留原作者版权与 MIT 许可。
+
+## 多轨道版本
+
+- 首页切换 **4K / 5K / 6K**，对应 4 / 5 / 6 条轨道。
+- 默认按键：4K `DFJK`、5K `DFJKL`、6K `SDFJKL`；手机直接点对应轨道。
+- 保留普通、无尽和练习模式，以及自定义图片、音效开关与时长设置。
+- 本版本使用纯静态 GitHub Pages，不启用原版 PHP 排行榜。
+- GitHub Actions 仅发布 `index.html`、`static/` 与 `LICENSE`，不会发布 PHP、数据库脚本或 Git 历史。
+- 在仓库 Settings → Pages 中选择 GitHub Actions；推送 main 后自动部署。
+
+下面保留原项目说明供来源参考；其中 PHP 部署说明不适用于本版本的 Pages 页面。
+
+---
+
+# EatKano（原项目说明）
 
 _🦌 网页小游戏 🥛_
 
