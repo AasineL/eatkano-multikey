@@ -1,9 +1,13 @@
 <p align="center">
-  <a href="https://xingye.me/game/eatkano"><img src="https://github.com/arcxingye/EatKano/blob/main/static/image/ClickBefore.png?raw=true" width="100" height="100" alt="EatKano"></a>
+  <a href="https://aasinel.github.io/eatkano-multikey/"><img src="https://github.com/arcxingye/EatKano/blob/main/static/image/ClickBefore.png?raw=true" width="100" height="100" alt="EatKano"></a>
 </p>
 <div align="center">
 
 # EatKano MultiKey
+
+## 🎮 [点击直接游玩 · 4K / 5K / 6K](https://aasinel.github.io/eatkano-multikey/)
+
+在线地址：**https://aasinel.github.io/eatkano-multikey/**
 
 基于 [arcxingye/EatKano](https://github.com/arcxingye/EatKano) 的多轨道改版，保留原作者版权与 MIT 许可。
 
