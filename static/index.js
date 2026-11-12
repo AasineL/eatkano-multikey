@@ -1,4 +1,4 @@
-const MODE_NORMAL = 1, MODE_ENDLESS = 2, MODE_PRACTICE = 3;
+const MODE_NORMAL = 1, MODE_ENDLESS = 2, MODE_PRACTICE = 3, MODE_STAIRCASE = 4;
 
 (function (w) {
     'use strict';
@@ -21,7 +21,7 @@ const MODE_NORMAL = 1, MODE_ENDLESS = 2, MODE_PRACTICE = 3;
     let lanes = Number(readSetting('lanes', 4));
     if (![4, 5, 6].includes(lanes)) lanes = 4;
     let mode = Number(readSetting('mode', MODE_NORMAL));
-    if (![MODE_NORMAL, MODE_ENDLESS, MODE_PRACTICE].includes(mode)) mode = MODE_NORMAL;
+    if (![MODE_NORMAL, MODE_ENDLESS, MODE_PRACTICE, MODE_STAIRCASE].includes(mode)) mode = MODE_NORMAL;
     let duration = Number(readSetting('duration', 20));
     if (!Number.isInteger(duration) || duration < 1 || duration > 3600) duration = 20;
     let soundMode = readSetting('sound', 'on');
@@ -44,7 +44,17 @@ const MODE_NORMAL = 1, MODE_ENDLESS = 2, MODE_PRACTICE = 3;
     function playSound(id) {
         if (soundMode === 'on' && w.createjs && createjs.Sound) createjs.Sound.play(id);
     }
-    function modeText() { return I18N[mode === MODE_NORMAL ? 'normal' : mode === MODE_ENDLESS ? 'endless' : 'practice']; }
+    function timedMode() { return mode === MODE_NORMAL || mode === MODE_STAIRCASE; }
+    function modeText() { return I18N[{[MODE_NORMAL]: 'normal', [MODE_ENDLESS]: 'endless', [MODE_PRACTICE]: 'practice', [MODE_STAIRCASE]: 'staircase'}[mode]]; }
+    // One complete sweep per group; keep its progress across recycled layers.
+    let stairStep = 0, stairDirection = 1;
+    function nextColumn() {
+        if (mode !== MODE_STAIRCASE) return Math.floor(Math.random() * lanes);
+        if (stairStep === 0) stairDirection = Math.random() < 0.5 ? 1 : -1;
+        const col = stairDirection === 1 ? stairStep : lanes - 1 - stairStep;
+        stairStep = (stairStep + 1) % lanes;
+        return col;
+    }
     function updateHints() {
         $('#mode').text(modeText());
         $('#key-hint').text(lanes + 'K · ' + keysets[lanes].toUpperCase().split('').join(' · '));
@@ -101,7 +111,7 @@ const MODE_NORMAL = 1, MODE_ENDLESS = 2, MODE_PRACTICE = 3;
             cell.className = 'block' + (Array.prototype.indexOf.call(layer.children, cell) % lanes ? ' bl' : '');
         }
         for (let row = first ? 1 : 0; row < 10; row++) {
-            const col = Math.floor(Math.random() * lanes);
+            const col = nextColumn();
             const cell = layer.children[row * lanes + col];
             cell.classList.add('t' + (Math.floor(Math.random() * 5) + 1));
             targets.push({cell, col, row, layer});
@@ -119,6 +129,7 @@ const MODE_NORMAL = 1, MODE_ENDLESS = 2, MODE_PRACTICE = 3;
         clearTimers();
         targets = [];
         targetIndex = score = 0;
+        stairStep = 0;
         playing = over = false;
         startedAt = endedAt = deadline = 0;
         board.classList.remove('flash');
@@ -133,7 +144,7 @@ const MODE_NORMAL = 1, MODE_ENDLESS = 2, MODE_PRACTICE = 3;
     function elapsed() { return startedAt ? Math.max(0, ((endedAt || performance.now()) - startedAt) / 1000) : 0; }
     function cps() { const seconds = elapsed(); return seconds > 0 ? score / seconds : 0; }
     function updatePanel() {
-        if (mode === MODE_NORMAL) {
+        if (timedMode()) {
             panel.textContent = over && endedAt >= deadline && deadline ? I18N['time-up'] : 'TIME:' + (playing ? Math.max(0, Math.ceil((deadline - performance.now()) / 1000)) : duration);
         } else if (mode === MODE_ENDLESS) {
             panel.textContent = 'CPS:' + (elapsed() < 2 ? (I18N.calculating || '…') : cps().toFixed(2));
@@ -141,7 +152,7 @@ const MODE_NORMAL = 1, MODE_ENDLESS = 2, MODE_PRACTICE = 3;
     }
     function tick() {
         if (!playing || over) return;
-        if (mode === MODE_NORMAL && performance.now() >= deadline) {
+        if (timedMode() && performance.now() >= deadline) {
             finish(true);
             return;
         }
@@ -181,7 +192,7 @@ const MODE_NORMAL = 1, MODE_ENDLESS = 2, MODE_PRACTICE = 3;
     }
     function hit(col) {
         if (welcome || over || col < 0 || col >= lanes) return;
-        if (playing && mode === MODE_NORMAL && performance.now() >= deadline) { finish(true); return; }
+        if (playing && timedMode() && performance.now() >= deadline) { finish(true); return; }
         const target = targets[targetIndex];
         if (!target) return;
         if (col !== target.col) {
@@ -277,7 +288,7 @@ const MODE_NORMAL = 1, MODE_ENDLESS = 2, MODE_PRACTICE = 3;
         restart();
     };
     w.changeMode = function (value) {
-        if (!welcome || ![MODE_NORMAL, MODE_ENDLESS, MODE_PRACTICE].includes(value)) return;
+        if (!welcome || ![MODE_NORMAL, MODE_ENDLESS, MODE_PRACTICE, MODE_STAIRCASE].includes(value)) return;
         mode = value;
         store('mode', mode);
         updateHints();
