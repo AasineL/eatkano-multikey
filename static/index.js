@@ -45,7 +45,7 @@ const MODE_NORMAL = 1, MODE_ENDLESS = 2, MODE_PRACTICE = 3, MODE_STAIRCASE = 4;
     function playSound(id) {
         if (soundMode === 'on' && w.createjs && createjs.Sound) createjs.Sound.play(id);
     }
-    function timedMode() { return mode === MODE_NORMAL || mode === MODE_STAIRCASE; }
+    function timedMode() { return mode === MODE_NORMAL; }
     function modeText() { return I18N[{[MODE_NORMAL]: 'normal', [MODE_ENDLESS]: 'endless', [MODE_PRACTICE]: 'practice', [MODE_STAIRCASE]: 'staircase'}[mode]]; }
     // One complete sweep per group; keep its progress across recycled layers.
     let stairStep = 0, stairDirection = 1;
@@ -202,7 +202,7 @@ const MODE_NORMAL = 1, MODE_ENDLESS = 2, MODE_PRACTICE = 3, MODE_STAIRCASE = 4;
             const wrong = target.layer.children[target.row * lanes + col];
             clearBad(wrong);
             wrong.classList.add('bad');
-            if (mode === MODE_PRACTICE) {
+            if (mode === MODE_PRACTICE || mode === MODE_STAIRCASE) {
                 const round = generation;
                 badTimers.set(wrong, setTimeout(() => {
                     if (round === generation) clearBad(wrong);
