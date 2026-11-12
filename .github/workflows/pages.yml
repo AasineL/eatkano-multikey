@@ -24,6 +24,13 @@ jobs:
           mkdir _site
           cp index.html LICENSE _site/
           cp -r static _site/
+          # Give each deployment unique resource URLs, including translations.
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          page = Path('_site/index.html')
+          page.write_text(page.read_text().replace('__GAME_VERSION__', os.environ['GITHUB_SHA']))
+          PY
           touch _site/.nojekyll
       - uses: actions/upload-pages-artifact@v3
         with:

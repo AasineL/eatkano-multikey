@@ -13,7 +13,8 @@ const MODE_NORMAL = 1, MODE_ENDLESS = 2, MODE_PRACTICE = 3, MODE_STAIRCASE = 4;
         try { localStorage.setItem('eatkano.' + key, String(value)); } catch (_) { /* Session fallback. */ }
     }
     const lang = /^zh\b/i.test(navigator.language) ? 'zh' : /^ja\b/i.test(navigator.language) ? 'ja' : 'en';
-    const I18N = $.ajax({url: './static/i18n/' + lang + '.json', dataType: 'json', async: false}).responseJSON || {};
+    const version = document.querySelector('meta[name="game-version"]')?.content || 'local';
+    const I18N = $.ajax({url: './static/i18n/' + lang + '.json?v=' + encodeURIComponent(version), dataType: 'json', async: false}).responseJSON || {};
     $('[data-i18n]').each(function () { $(this).text(I18N[this.dataset.i18n] || this.textContent); });
     $('[data-placeholder-i18n]').each(function () { $(this).attr('placeholder', I18N[this.dataset.placeholderI18n]); });
     $('html').attr('lang', I18N.lang || lang);
