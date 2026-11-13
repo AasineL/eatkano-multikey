@@ -239,7 +239,7 @@ const MODE_NORMAL = 1, MODE_ENDLESS = 2, MODE_PRACTICE = 3, MODE_STAIRCASE = 4;
         const x = point.clientX - rect.left;
         const y = point.clientY - rect.top;
         // Zero is a valid coordinate; intervals are left-inclusive/right-exclusive.
-        if (x < 0 || x >= rect.width || y < Math.max(0, rect.height - 3 * blockSize) || y >= rect.height) return;
+        if (x < 0 || x >= rect.width || y < 0 || y >= rect.height) return;
         if (e.cancelable) e.preventDefault();
         hit(Math.floor(x / blockSize));
     }
